@@ -58,5 +58,13 @@ $(document).ready(function() {
     var destination = childsnap.val().destination;
     var firstTrainTime = childsnap.val().firstTrainTime;
     var frequency = childsnap.val().frequency;
+
+    var convFirstTrainTime = moment(firstTrainTime, "hh:mm").subtract(
+      1,
+      "days"
+    );
+
+    var currentTime = moment();
+    var convCurrentTime = moment(currentTime).format("hh:mm");
   });
 });
