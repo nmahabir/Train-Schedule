@@ -1,42 +1,62 @@
-// $(document).ready(function() {
-var config = {
-  apiKey: "AIzaSyDAepZl_CLXxMWSSovaX5XtsVIKYmA6mbc",
-  authDomain: "train-schedule-9f586.firebaseapp.com",
-  databaseURL: "https://train-schedule-9f586.firebaseio.com",
-  projectId: "train-schedule-9f586",
-  storageBucket: "train-schedule-9f586.appspot.com",
-  messagingSenderId: "438124838591"
-};
-firebase.initializeApp(config);
+$(document).ready(function() {
+  var config = {
+    apiKey: "AIzaSyDAepZl_CLXxMWSSovaX5XtsVIKYmA6mbc",
+    authDomain: "train-schedule-9f586.firebaseapp.com",
+    databaseURL: "https://train-schedule-9f586.firebaseio.com",
+    projectId: "train-schedule-9f586",
+    storageBucket: "train-schedule-9f586.appspot.com",
+    messagingSenderId: "438124838591"
+  };
+  firebase.initializeApp(config);
 
-var trainName = "";
-var destination = "";
-var firstTrainTime = 0;
-var frequency = 0;
+  var database = firebase.database();
 
-$("#submitButton").on("click", function(event) {
-  event.preventDefault();
+  var trainName = "";
+  var destination = "";
+  var firstTrainTime = 0;
+  var frequency = 0;
 
-  trainName = $("#trainName").val();
-  //   .trim();
-  destination = $("#destination").val();
-  //   .trim();
-  firstTrainTime = $("#firstTrainTime").val();
-  //   .trim();
-  frequency = $("#frequency").val();
-  //   .trim();
+  $("#submitButton").on("click", function(event) {
+    event.preventDefault();
 
-  console.log(trainName);
-  console.log(destination);
-  console.log(firstTrainTime);
-  console.log(frequency);
+    trainName = $("#trainName")
+      .val()
+      .trim();
+    destination = $("#destination")
+      .val()
+      .trim();
+    firstTrainTime = $("#firstTrainTime")
+      .val()
+      .trim();
+    frequency = $("#frequency")
+      .val()
+      .trim();
 
-  database.ref().push({
-    trainName: trainName,
-    destination: destination,
-    firstTrainTime: firstTrainTime,
-    frequency: frequency,
-    dataAdded: firebase.database.ServerValue.TIMESTAMP
+    $("#trainName").val("");
+    $("#destination").val("");
+    $("#firstTrainTime").val("");
+    $("#frequency").val("");
+
+    console.log(trainName);
+    console.log(destination);
+    console.log(firstTrainTime);
+    console.log(frequency);
+
+    database.ref().push({
+      trainName: trainName,
+      destination: destination,
+      firstTrainTime: firstTrainTime,
+      frequency: frequency,
+      dataAdded: firebase.database.ServerValue.TIMESTAMP
+    });
+  });
+
+  database.ref().on("child_added", function(childsnap) {
+    console.log(childsnap.val());
+
+    var trainName = childsnap.val().trainName;
+    var destination = childsnap.val().destination;
+    var firstTrainTime = childsnap.val().firstTrainTime;
+    var frequency = childsnap.val().frequency;
   });
 });
-// });
