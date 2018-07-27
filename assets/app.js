@@ -63,8 +63,16 @@ $(document).ready(function() {
       1,
       "days"
     );
-
     var currentTime = moment();
     var convCurrentTime = moment(currentTime).format("hh:mm");
+
+    var newRow = $("<tr>").append(
+      $("<td>").text(trainName),
+      $("<td>").text(destination),
+      $("<td>").text(firstTrainTime),
+      $("<td>").text(frequency)
+    );
+
+    $("#trainTable > tbody").append(newRow);
   });
 });
