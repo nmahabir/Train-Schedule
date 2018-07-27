@@ -37,11 +37,6 @@ $(document).ready(function() {
     $("#firstTrainTime").val("");
     $("#frequency").val("");
 
-    console.log(trainName);
-    console.log(destination);
-    console.log(firstTrainTime);
-    console.log(frequency);
-
     database.ref().push({
       trainName: trainName,
       destination: destination,
@@ -52,42 +47,35 @@ $(document).ready(function() {
   });
 
   database.ref().on("child_added", function(childsnap) {
-    console.log(childsnap.val());
-
     var trainName = childsnap.val().trainName;
     var destination = childsnap.val().destination;
     var firstTrainTime = childsnap.val().firstTrainTime;
-    console.log("FTT = " + firstTrainTime);
+
     var frequency = childsnap.val().frequency;
 
     var convFirstTrainTime = moment(firstTrainTime, "hh:mm");
 
-    var currentTime = moment();
-    var convCurrentTime = moment(currentTime).format("hh:mm");
-    var currentTimeMins = moment().minute();
-
     var diffMins = moment().diff(moment(convFirstTrainTime), "minutes");
-    console.log(diffMins);
+
     if (diffMins < 0) {
       diffMins = diffMins * -1;
       minsAway = diffMins;
-      console.log(diffMins);
+
+      nextArrival = firstTrainTime;
     } else {
       var trainsGone = diffMins % frequency;
       var minsAway = frequency - trainsGone;
-      console.log(trainsGone);
+      var minsToMsecs = minsAway * 1000 * 60;
+      var unixArrival = moment() + minsToMsecs;
+
+      var nextArrival = moment(unixArrival).format("hh:mm");
     }
-
-    console.log("CT" + currentTime, "CTM = " + currentTimeMins);
-    console.log("CCT = " + convCurrentTime, "CFTT =  " + convFirstTrainTime);
-
-    console.log(minsAway);
 
     var newRow = $("<tr>").append(
       $("<td>").text(trainName),
       $("<td>").text(destination),
-      $("<td>").text(firstTrainTime),
       $("<td>").text(frequency),
+      $("<td>").text(nextArrival),
       $("<td>").text(minsAway)
     );
 
