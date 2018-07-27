@@ -57,20 +57,28 @@ $(document).ready(function() {
     var trainName = childsnap.val().trainName;
     var destination = childsnap.val().destination;
     var firstTrainTime = childsnap.val().firstTrainTime;
+    console.log("FTT = " + firstTrainTime);
     var frequency = childsnap.val().frequency;
 
-    var convFirstTrainTime = moment(firstTrainTime, "hh:mm").subtract(
-      1,
-      "days"
-    );
+    var convFirstTrainTime = moment(firstTrainTime, "hh:mm");
+
     var currentTime = moment();
     var convCurrentTime = moment(currentTime).format("hh:mm");
+    var currentTimeMins = moment().minute();
+
+    var diffMins = moment().diff(moment(convFirstTrainTime), "minutes");
+    console.log(diffMins);
+    console.log("CT" + currentTime, "CTM = " + currentTimeMins);
+    console.log("CCT = " + convCurrentTime, "CFTT =  " + convFirstTrainTime);
+    var minsAway = convCurrentTime - convFirstTrainTime;
+    console.log(minsAway);
 
     var newRow = $("<tr>").append(
       $("<td>").text(trainName),
       $("<td>").text(destination),
       $("<td>").text(firstTrainTime),
-      $("<td>").text(frequency)
+      $("<td>").text(frequency),
+      $("<td>").text(minsAway)
     );
 
     $("#trainTable > tbody").append(newRow);
