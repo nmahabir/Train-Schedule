@@ -68,9 +68,19 @@ $(document).ready(function() {
 
     var diffMins = moment().diff(moment(convFirstTrainTime), "minutes");
     console.log(diffMins);
+    if (diffMins < 0) {
+      diffMins = diffMins * -1;
+      minsAway = diffMins;
+      console.log(diffMins);
+    } else {
+      var trainsGone = diffMins % frequency;
+      var minsAway = frequency - trainsGone;
+      console.log(trainsGone);
+    }
+
     console.log("CT" + currentTime, "CTM = " + currentTimeMins);
     console.log("CCT = " + convCurrentTime, "CFTT =  " + convFirstTrainTime);
-    var minsAway = convCurrentTime - convFirstTrainTime;
+
     console.log(minsAway);
 
     var newRow = $("<tr>").append(
